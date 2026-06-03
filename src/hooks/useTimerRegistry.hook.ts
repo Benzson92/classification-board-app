@@ -1,14 +1,5 @@
-// ── React ────────────────────────────────────────────────────────────────
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
-/**
- * A reusable registry of keyed timeouts with automatic cleanup.
- *
- * The pass's row of egg timers: each plate gets its own timer, you can cancel
- * any single one, setting a new timer for a plate replaces the old one, and
- * when the kitchen closes (unmount) every timer is cleared so none rings into
- * an empty room. Feature-agnostic — reuse it for toasts, polling, autosave.
- */
 export interface TimerRegistry<TKey> {
   /** Arm (or replace) a timer for `key`, firing `callback` after `delayMs`. */
   readonly set: (key: TKey, callback: () => void, delayMs: number) => void;
@@ -43,7 +34,6 @@ export function useTimerRegistry<TKey>(): TimerRegistry<TKey> {
     [],
   );
 
-  // Close the kitchen: clear everything on unmount.
   useEffect(() => {
     const registry = timers.current;
     return () => {

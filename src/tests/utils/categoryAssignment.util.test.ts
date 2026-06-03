@@ -1,16 +1,10 @@
-// ── Vitest ───────────────────────────────────────────────────────────────
 import { describe, expect, it } from "vitest";
 
-// ── Types ────────────────────────────────────────────────────────────────
 import type { CategoryItem, RawItem } from "@/models/categoryAssignment.model";
-
-// ── Domain ───────────────────────────────────────────────────────────────
 import { CategoryAssignmentStatus } from "@/models/categoryAssignment.model";
 
-// ── Config ───────────────────────────────────────────────────────────────
 import { CATEGORIES } from "@/constants/config";
 
-// ── Subject under test ─────────────────────────────────────────────────────
 import {
   buildCategorizedItems,
   normalizeItems,

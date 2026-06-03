@@ -1,21 +1,11 @@
-// ── React ────────────────────────────────────────────────────────────────
 import { memo } from "react";
 import type { FC } from "react";
 
-// ── Types ────────────────────────────────────────────────────────────────
 import type { CategoryItem, ItemId } from "@/models/categoryAssignment.model";
 
-// ── Components ───────────────────────────────────────────────────────────
 import CategoryListItem from "./CategoryListItem";
 
-/**
- * One column on the board. Deliberately generic: the SAME component renders the
- * staging list (no header, no countdown) and every category station (header +
- * countdown). Reuse beats three near-identical column components that drift
- * apart over time.
- */
 export interface CategoryListColumnProps {
-  /** Omit for the headerless staging list; provide for category stations. */
   readonly title?: string;
   readonly bgColorClassName?: string;
   readonly items: readonly CategoryItem[];
@@ -43,18 +33,11 @@ const CategoryListColumnBase: FC<CategoryListColumnProps> = ({
       }
     >
       {hasHeader && (
-        // <header
-        //   className="rounded-t-xl border-b border-neutral-200 bg-neutral-100/70
-        //              px-4 py-3 text-center text-base font-semibold text-neutral-800"
-        // >
         <header
           className={[
-            // Static layout/shape — never changes:
             "border-b border-neutral-200 px-4 py-3",
             "text-center text-base font-semibold",
-            // Variable: the category's colour, or fall back to neutral:
             bgColorClassName ?? "bg-neutral-100/70",
-            // Light text reads cleanly on a saturated -600 banner; dark text on the neutral fallback:
             bgColorClassName ? "text-white" : "text-neutral-800",
           ].join(" ")}
         >

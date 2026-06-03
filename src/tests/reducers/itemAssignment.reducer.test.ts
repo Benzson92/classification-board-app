@@ -1,14 +1,9 @@
-// ── Vitest ───────────────────────────────────────────────────────────────
 import { describe, expect, it } from "vitest";
 
-// ── Types ────────────────────────────────────────────────────────────────
 import type { ItemAssignmentState } from "@/reducers/itemAssignment.reducer";
-
-// ── Domain ───────────────────────────────────────────────────────────────
-import { CategoryAssignmentStatus } from "@/models/categoryAssignment.model";
-
-// ── Subject under test ─────────────────────────────────────────────────────
 import { itemAssignmentReducer } from "@/reducers/itemAssignment.reducer";
+
+import { CategoryAssignmentStatus } from "@/models/categoryAssignment.model";
 
 const initial: ItemAssignmentState = [
   {

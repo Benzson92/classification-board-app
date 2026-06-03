@@ -1,35 +1,20 @@
-// ── React ────────────────────────────────────────────────────────────────
 import { useCallback, useMemo, useReducer } from "react";
 
-// ── Types ────────────────────────────────────────────────────────────────
 import type { CategorizedItems } from "@/utils/categoryAssignment.util";
 import type { ItemId, RawItem } from "@/models/categoryAssignment.model";
 
-// ── Config ───────────────────────────────────────────────────────────────
 import { AUTO_RETURN_MS, CATEGORIES } from "@/constants/config";
 import { ItemAssignmentActionType } from "@/constants/itemAssignmentAction.constant";
 
-// ── Logic ────────────────────────────────────────────────────────────────
 import {
   buildCategorizedItems,
   normalizeItems,
 } from "@/utils/categoryAssignment.util";
 
-// ── Reducer ──────────────────────────────────────────────────────────────
 import { itemAssignmentReducer } from "@/reducers/itemAssignment.reducer";
 
-// ── Hooks ────────────────────────────────────────────────────────────────
 import { useTimerRegistry } from "@/hooks/useTimerRegistry.hook";
 
-/**
- * The head chef of the feature.
- *
- * Owns the master list (reducer state), runs the auto-return timers, and hands
- * the UI two commands — `assign` and `unassign`. The UI never touches timers or
- * raw state; it calls these and renders the categorized items. Swapping the
- * storage engine later (Zustand, a server, WebSocket sync) means rewriting only
- * this hook — the components don't move.
- */
 export interface UseItemAssignmentResult {
   readonly categorizedItems: CategorizedItems;
   readonly assign: (id: ItemId) => void;
@@ -39,7 +24,6 @@ export interface UseItemAssignmentResult {
 export const useItemAssignment = (
   rawItems: readonly RawItem[],
 ): UseItemAssignmentResult => {
-  // Normalize untrusted input ONCE, lazily, at the boundary.
   const [items, dispatch] = useReducer(
     itemAssignmentReducer,
     rawItems,
