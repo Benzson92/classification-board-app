@@ -48,8 +48,8 @@ const CategoryListItemBase: FC<CategoryListItemProps> = ({
           aria-hidden
           // className="absolute bottom-0 left-0 h-1 w-full origin-left bg-neutral-300"
           className={`absolute bottom-0 left-0 h-1 w-full origin-left ${
-  bgColorClassName ?? "bg-neutral-300"
-}`}
+            bgColorClassName ?? "bg-neutral-300"
+          }`}
           style={{ animation: `cb-shrink ${AUTO_RETURN_MS}ms linear forwards` }}
         />
       )}

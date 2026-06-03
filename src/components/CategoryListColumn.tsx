@@ -48,24 +48,22 @@ const CategoryListColumnBase: FC<CategoryListColumnProps> = ({
         //              px-4 py-3 text-center text-base font-semibold text-neutral-800"
         // >
         <header
-        className={[
-          // Static layout/shape — never changes:
-          "border-b border-neutral-200 px-4 py-3",
-          "text-center text-base font-semibold",
-          // Variable: the category's colour, or fall back to neutral:
-          bgColorClassName ?? "bg-neutral-100/70",
-          // Light text reads cleanly on a saturated -600 banner; dark text on the neutral fallback:
-          bgColorClassName ? "text-white" : "text-neutral-800",
-        ].join(" ")}
-      >
+          className={[
+            // Static layout/shape — never changes:
+            "border-b border-neutral-200 px-4 py-3",
+            "text-center text-base font-semibold",
+            // Variable: the category's colour, or fall back to neutral:
+            bgColorClassName ?? "bg-neutral-100/70",
+            // Light text reads cleanly on a saturated -600 banner; dark text on the neutral fallback:
+            bgColorClassName ? "text-white" : "text-neutral-800",
+          ].join(" ")}
+        >
           {title}
         </header>
       )}
 
       <div
-        className={
-          hasHeader ? "flex min-h-30 flex-col gap-3 p-3" : "contents"
-        }
+        className={hasHeader ? "flex min-h-30 flex-col gap-3 p-3" : "contents"}
       >
         {items.length === 0 && emptyHint && (
           <p className="px-2 py-3 text-center text-sm text-neutral-400">

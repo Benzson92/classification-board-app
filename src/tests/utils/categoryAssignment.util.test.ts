@@ -11,7 +11,11 @@ import { CategoryAssignmentStatus } from "@/models/categoryAssignment.model";
 import { CATEGORIES } from "@/constants/config";
 
 // ── Subject under test ─────────────────────────────────────────────────────
-import { buildCategorizedItems, normalizeItems, reassignItem } from "@/utils/categoryAssignment.util";
+import {
+  buildCategorizedItems,
+  normalizeItems,
+  reassignItem,
+} from "@/utils/categoryAssignment.util";
 
 describe("normalizeItems", () => {
   it("maps known types case-insensitively and trims names", () => {
@@ -58,26 +62,55 @@ describe("normalizeItems", () => {
 
 describe("reassignItem", () => {
   const base: CategoryItem[] = [
-    { id: "a", name: "Apple", categoryId: "fruit", categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned },
-    { id: "b", name: "Carrot", categoryId: "vegetable", categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned },
-    { id: "c", name: "Mango", categoryId: "fruit", categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned },
+    {
+      id: "a",
+      name: "Apple",
+      categoryId: "fruit",
+      categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned,
+    },
+    {
+      id: "b",
+      name: "Carrot",
+      categoryId: "vegetable",
+      categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned,
+    },
+    {
+      id: "c",
+      name: "Mango",
+      categoryId: "fruit",
+      categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned,
+    },
   ];
 
   it("moves the target to the end and updates its status", () => {
-    const result = reassignItem({ items: base, itemId: "a", assignmentStatus: CategoryAssignmentStatus.Assigned });
+    const result = reassignItem({
+      items: base,
+      itemId: "a",
+      assignmentStatus: CategoryAssignmentStatus.Assigned,
+    });
 
     expect(result.map((item) => item.id)).toEqual(["b", "c", "a"]);
-    expect(result.at(-1)?.categoryAssignmentStatus).toBe(CategoryAssignmentStatus.Assigned);
+    expect(result.at(-1)?.categoryAssignmentStatus).toBe(
+      CategoryAssignmentStatus.Assigned,
+    );
   });
 
   it("returns the SAME reference when the id is not found (no needless re-render)", () => {
-    const result = reassignItem({ items: base, itemId: "missing", assignmentStatus: CategoryAssignmentStatus.Assigned });
+    const result = reassignItem({
+      items: base,
+      itemId: "missing",
+      assignmentStatus: CategoryAssignmentStatus.Assigned,
+    });
     expect(result).toBe(base);
   });
 
   it("does not mutate the input array", () => {
     const snapshot = [...base];
-    reassignItem({ items: base, itemId: "a", assignmentStatus: CategoryAssignmentStatus.Assigned });
+    reassignItem({
+      items: base,
+      itemId: "a",
+      assignmentStatus: CategoryAssignmentStatus.Assigned,
+    });
     expect(base).toEqual(snapshot);
   });
 });
@@ -85,12 +118,30 @@ describe("reassignItem", () => {
 describe("buildCategorizedItems", () => {
   it("splits unassigned from categorized items and preserves order within each", () => {
     const items: CategoryItem[] = [
-      { id: "a", name: "Apple", categoryId: "fruit", categoryAssignmentStatus: CategoryAssignmentStatus.Assigned },
-      { id: "b", name: "Carrot", categoryId: "vegetable", categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned },
-      { id: "c", name: "Mango", categoryId: "fruit", categoryAssignmentStatus: CategoryAssignmentStatus.Assigned },
+      {
+        id: "a",
+        name: "Apple",
+        categoryId: "fruit",
+        categoryAssignmentStatus: CategoryAssignmentStatus.Assigned,
+      },
+      {
+        id: "b",
+        name: "Carrot",
+        categoryId: "vegetable",
+        categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned,
+      },
+      {
+        id: "c",
+        name: "Mango",
+        categoryId: "fruit",
+        categoryAssignmentStatus: CategoryAssignmentStatus.Assigned,
+      },
     ];
 
-    const { unassignedItems, itemsByCategory } = buildCategorizedItems({ items, categories: CATEGORIES });
+    const { unassignedItems, itemsByCategory } = buildCategorizedItems({
+      items,
+      categories: CATEGORIES,
+    });
 
     expect(unassignedItems.map((i) => i.id)).toEqual(["b"]);
     expect(itemsByCategory.fruit?.map((i) => i.id)).toEqual(["a", "c"]); // order kept
@@ -98,7 +149,10 @@ describe("buildCategorizedItems", () => {
   });
 
   it("pre-seeds every known category so empty columns still exist", () => {
-    const { itemsByCategory } = buildCategorizedItems({ items: [], categories: CATEGORIES });
+    const { itemsByCategory } = buildCategorizedItems({
+      items: [],
+      categories: CATEGORIES,
+    });
     expect(Object.keys(itemsByCategory).sort()).toEqual(["fruit", "vegetable"]);
   });
 });

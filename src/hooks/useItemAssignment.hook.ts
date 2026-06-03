@@ -10,7 +10,10 @@ import { AUTO_RETURN_MS, CATEGORIES } from "@/constants/config";
 import { ItemAssignmentActionType } from "@/constants/itemAssignmentAction.constant";
 
 // ── Logic ────────────────────────────────────────────────────────────────
-import { buildCategorizedItems, normalizeItems } from "@/utils/categoryAssignment.util";
+import {
+  buildCategorizedItems,
+  normalizeItems,
+} from "@/utils/categoryAssignment.util";
 
 // ── Reducer ──────────────────────────────────────────────────────────────
 import { itemAssignmentReducer } from "@/reducers/itemAssignment.reducer";
@@ -62,7 +65,8 @@ export const useItemAssignment = (
       // and auto-unassigns can never double-fire on the same item.
       timers.set(
         id,
-        () => dispatch({ type: ItemAssignmentActionType.UnassignItem, itemId: id }),
+        () =>
+          dispatch({ type: ItemAssignmentActionType.UnassignItem, itemId: id }),
         AUTO_RETURN_MS,
       );
     },

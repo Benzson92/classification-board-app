@@ -19,10 +19,11 @@ export const AUTO_RETURN_MS = 5_000;
  * grouping, and rendering all adapt — no other file changes.
  */
 export const CATEGORIES: readonly Category[] = [
-  { id: "fruit", label: "Fruit", bgColorClassName:'bg-orange-700' },
-  { id: "vegetable", label: "Vegetable",bgColorClassName:'bg-green-700' },
+  { id: "fruit", label: "Fruit", bgColorClassName: "bg-orange-700" },
+  { id: "vegetable", label: "Vegetable", bgColorClassName: "bg-green-700" },
 ] as const;
 
 /** Fast O(1) lookup from a CategoryId to its definition, built once. */
-export const CATEGORY_BY_ID: ReadonlyMap<CategoryId, Category> =
-  new Map(CATEGORIES.map((category) => [category.id, category]));
+export const CATEGORY_BY_ID: ReadonlyMap<CategoryId, Category> = new Map(
+  CATEGORIES.map((category) => [category.id, category]),
+);

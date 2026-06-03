@@ -23,12 +23,12 @@ export type ItemAssignmentState = readonly CategoryItem[];
 /** Every legal change to the item assignment state, expressed as plain data. */
 export type ItemAssignmentAction =
   | {
-    readonly type: typeof ItemAssignmentActionType.AssignItem;
-    readonly itemId: ItemId;
+      readonly type: typeof ItemAssignmentActionType.AssignItem;
+      readonly itemId: ItemId;
     }
   | {
-    readonly type: typeof ItemAssignmentActionType.UnassignItem;
-    readonly itemId: ItemId;
+      readonly type: typeof ItemAssignmentActionType.UnassignItem;
+      readonly itemId: ItemId;
     };
 
 export const itemAssignmentReducer = (
@@ -43,8 +43,8 @@ export const itemAssignmentReducer = (
         assignmentStatus: CategoryAssignmentStatus.Assigned,
       });
 
-      case ItemAssignmentActionType.UnassignItem:
-        return reassignItem({
+    case ItemAssignmentActionType.UnassignItem:
+      return reassignItem({
         items: state,
         itemId: action.itemId,
         assignmentStatus: CategoryAssignmentStatus.Unassigned,
