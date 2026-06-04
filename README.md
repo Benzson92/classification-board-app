@@ -2,6 +2,10 @@
 
 A responsive classification board application built with React, TypeScript, and Vite. The application allows users to organize, classify, and manage items across multiple categories through an intuitive board interface.
 
+## Live Demo
+
+Visit the application: [classification-board-app.vercel.app](https://classification-board-app.vercel.app)
+
 ## Features
 
 * Display items grouped by category
