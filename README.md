@@ -29,10 +29,9 @@ src/
 ├── constants/
 ├── hooks/
 ├── models/
-├── pages/
-├── services/
-├── utils/
-└── types/
+├── reducers/
+├── tests/
+└── utils/
 ```
 
 ## Getting Started
