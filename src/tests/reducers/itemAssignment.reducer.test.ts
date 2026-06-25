@@ -55,4 +55,14 @@ describe("itemAssignmentReducer", () => {
     itemAssignmentReducer(initial, { type: "ASSIGN_ITEM", itemId: "a" });
     expect(JSON.stringify(initial)).toBe(snapshot);
   });
+
+  it("should throw an error for an unsupported action", () => {
+    expect(() =>
+      itemAssignmentReducer(initial, {
+        type: "UNKNOWN_ACTION",
+      } as never),
+    ).toThrow(
+      'Unhandled item assignment action: {"type":"UNKNOWN_ACTION"}',
+    );
+  });
 });
