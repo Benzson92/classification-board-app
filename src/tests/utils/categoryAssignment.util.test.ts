@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, afterEach } from "vitest";
 
 import type { CategoryItem, RawItem } from "@/models/categoryAssignment.model";
 import { CategoryAssignmentStatus } from "@/models/categoryAssignment.model";
@@ -148,5 +148,32 @@ describe("buildCategorizedItems", () => {
       categories: CATEGORIES,
     });
     expect(Object.keys(itemsByCategory).sort()).toEqual(["fruit", "vegetable"]);
+  });
+});
+
+describe("createItemId fallback", () => {
+  const originalCrypto = globalThis.crypto;
+
+  afterEach(() => {
+    Object.defineProperty(globalThis, "crypto", {
+      value: originalCrypto,
+      configurable: true,
+    });
+  });
+
+  it("uses the fallback id generator when randomUUID is unavailable", () => {
+    Object.defineProperty(globalThis, "crypto", {
+      value: {},
+      configurable: true,
+    });
+
+    const result = normalizeItems([
+      { type: "Fruit", name: "Apple" },
+      { type: "Fruit", name: "Banana" },
+    ]);
+
+    expect(result[0]?.id).toMatch(/^item-\d+$/);
+    expect(result[1]?.id).toMatch(/^item-\d+$/);
+    expect(result[0]?.id).not.toBe(result[1]?.id);
   });
 });
