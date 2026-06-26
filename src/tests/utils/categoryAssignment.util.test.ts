@@ -12,42 +12,42 @@ import {
 } from "@/utils/categoryAssignment.util";
 
 describe("normalizeItems", () => {
-  it("maps known types case-insensitively and trims names", () => {
-    const raw: RawItem[] = [
+  it("normalizes category names regardless of case and trims item names", () => {
+    const inputItems: RawItem[] = [
       { type: "Fruit", name: "  Apple  " },
       { type: "vegetable", name: "Carrot" },
     ];
 
-    const result = normalizeItems(raw);
+    const normalizedItems = normalizeItems(inputItems);
 
-    expect(result).toHaveLength(2);
-    expect(result[0]).toMatchObject({
+    expect(normalizedItems).toHaveLength(2);
+    expect(normalizedItems[0]).toMatchObject({
       name: "Apple",
       categoryId: "fruit",
       categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned,
     });
-    expect(result[1]?.categoryId).toBe("vegetable");
+    expect(normalizedItems[1]?.categoryId).toBe("vegetable");
   });
 
-  it("drops unknown categories at the boundary", () => {
-    const raw: RawItem[] = [
+  it("filters out items whose category is not supported", () => {
+    const inputItems: RawItem[] = [
       { type: "Fruit", name: "Apple" },
-      { type: "Mineral", name: "Quartz" }, // unknown station → rejected
+      { type: "Mineral", name: "Quartz" }, 
     ];
 
-    const result = normalizeItems(raw);
+    const normalizedItems = normalizeItems(inputItems);
 
-    expect(result).toHaveLength(1);
-    expect(result[0]?.name).toBe("Apple");
+    expect(normalizedItems).toHaveLength(1);
+    expect(normalizedItems[0]?.name).toBe("Apple");
   });
 
-  it("assigns unique ids", () => {
-    const raw: RawItem[] = [
+  it("generates a unique id for every normalized item", () => {
+    const inputItems: RawItem[] = [
       { type: "Fruit", name: "Apple" },
       { type: "Fruit", name: "Apple" }, // same name, must not collide
     ];
 
-    const [first, second] = normalizeItems(raw);
+    const [first, second] = normalizeItems(inputItems);
 
     expect(first?.id).toBeDefined();
     expect(first?.id).not.toBe(second?.id);
@@ -55,7 +55,7 @@ describe("normalizeItems", () => {
 });
 
 describe("reassignItem", () => {
-  const base: CategoryItem[] = [
+  const initialItems: CategoryItem[] = [
     {
       id: "a",
       name: "Apple",
@@ -76,36 +76,36 @@ describe("reassignItem", () => {
     },
   ];
 
-  it("moves the target to the end and updates its status", () => {
-    const result = reassignItem({
-      items: base,
+  it("moves the assigned item to the end of the list and updates its assignment status", () => {
+    const updatedItems = reassignItem({
+      items: initialItems,
       itemId: "a",
       assignmentStatus: CategoryAssignmentStatus.Assigned,
     });
 
-    expect(result.map((item) => item.id)).toEqual(["b", "c", "a"]);
-    expect(result.at(-1)?.categoryAssignmentStatus).toBe(
+    expect(updatedItems.map((item) => item.id)).toEqual(["b", "c", "a"]);
+    expect(updatedItems.at(-1)?.categoryAssignmentStatus).toBe(
       CategoryAssignmentStatus.Assigned,
     );
   });
 
-  it("returns the SAME reference when the id is not found (no needless re-render)", () => {
-    const result = reassignItem({
-      items: base,
+  it("returns the original array when the target item does not exist", () => {
+    const updatedItems = reassignItem({
+      items: initialItems,
       itemId: "missing",
       assignmentStatus: CategoryAssignmentStatus.Assigned,
     });
-    expect(result).toBe(base);
+    expect(updatedItems).toBe(initialItems);
   });
 
   it("does not mutate the input array", () => {
-    const snapshot = [...base];
+    const snapshot = [...initialItems];
     reassignItem({
-      items: base,
+      items: initialItems,
       itemId: "a",
       assignmentStatus: CategoryAssignmentStatus.Assigned,
     });
-    expect(base).toEqual(snapshot);
+    expect(initialItems).toEqual(snapshot);
   });
 });
 
@@ -142,7 +142,7 @@ describe("buildCategorizedItems", () => {
     expect(itemsByCategory.vegetable).toEqual([]);
   });
 
-  it("pre-seeds every known category so empty columns still exist", () => {
+  it("initializes every configured category even when it contains no items", () => {
     const { itemsByCategory } = buildCategorizedItems({
       items: [],
       categories: CATEGORIES,
@@ -161,7 +161,7 @@ describe("createItemId fallback", () => {
     });
   });
 
-  it("uses the fallback id generator when randomUUID is unavailable", () => {
+  it("generates sequential fallback ids when crypto.randomUUID is unavailable", () => {
     Object.defineProperty(globalThis, "crypto", {
       value: {},
       configurable: true,

@@ -23,18 +23,13 @@ describe("useItemAssignment", () => {
     vi.useFakeTimers();
   });
 
-  // afterEach(() => {
-  //   vi.runOnlyPendingTimers();
-  //   vi.useRealTimers();
-  // });
-
   afterEach(() => {
-  act(() => {
-    vi.clearAllTimers();
+    act(() => {
+      vi.clearAllTimers();
+    });
+  
+    vi.useRealTimers();
   });
-
-  vi.useRealTimers();
-});
 
   it("should build categorized items from the provided raw items", () => {
     const { result } = renderHook(() => useItemAssignment(rawItems));
