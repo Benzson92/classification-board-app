@@ -22,21 +22,21 @@ export const createItemId = (): ItemId => {
 export const normalizeItems = (
   rawItems: readonly RawItem[],
 ): readonly CategoryItem[] => {
-  const normalized: CategoryItem[] = [];
+  const normalizedItems: CategoryItem[] = [];
 
-  for (const raw of rawItems) {
-    const category = CATEGORY_BY_ID.get(raw.type.trim().toLowerCase());
-    if (!category) continue; // unknown station → reject at the door
+  for (const rawItem of rawItems) {
+    const category = CATEGORY_BY_ID.get(rawItem.type.trim().toLowerCase());
+    if (!category) continue; 
 
-    normalized.push({
+    normalizedItems.push({
       id: createItemId(),
-      name: raw.name.trim(),
+      name: rawItem.name.trim(),
       categoryId: category.id,
       categoryAssignmentStatus: CategoryAssignmentStatus.Unassigned,
     });
   }
 
-  return normalized;
+  return normalizedItems;
 };
 
 /** Arguments for {@link reassignItem}. */
